@@ -4,15 +4,14 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # --- Constants ---
-PASSWORD = "1234"  # Change to your secure password
+PASSWORD = "1234"  # Change this to something secure
 
 # --- OOP Classes ---
-
 class Transaction:
     def __init__(self, amount, category, t_type, date, description=""):
         self.amount = amount
         self.category = category
-        self.t_type = t_type  # "Income" or "Expense"
+        self.t_type = t_type
         self.date = date
         self.description = description
 
@@ -37,7 +36,7 @@ class FinanceTracker:
 
     def get_summary(self):
         df = self.get_dataframe()
-        if df.empty:  # Handle empty DataFrame
+        if df.empty:
             return 0, 0, 0
         income = df[df["Type"] == "Income"]["Amount"].sum()
         expense = df[df["Type"] == "Expense"]["Amount"].sum()
@@ -45,11 +44,10 @@ class FinanceTracker:
 
     def get_expense_by_category(self):
         df = self.get_dataframe()
-        if df.empty:  # Handle empty DataFrame
-            return pd.Series()  # Return empty series if no data
+        if df.empty:
+            return pd.Series()
         df = df[df["Type"] == "Expense"]
         return df.groupby("Category")["Amount"].sum()
-
 
 class FinanceApp:
     def __init__(self):
@@ -58,12 +56,17 @@ class FinanceApp:
     def run(self):
         st.set_page_config(page_title="💸 Finance Tracker", layout="centered")
 
+        # 👋 Welcome message BEFORE password prompt
+        st.markdown("## 👋 Welcome to your Personal Finance Tracker!")
+        st.markdown("💼 Keep track of your income 💵 and expenses 💸 with ease. Let’s get started! 🚀")
+
         # --- Password/Login ---
         password = st.text_input("🔒 Enter Password", type="password")
         if password != PASSWORD:
-            st.warning("🔐 Correct password required to access the app.")
-            st.stop()  # Stop the app if the password is incorrect
+            st.warning("🔐 Please enter the correct password to access the app.")
+            st.stop()
 
+        # --- Main App UI ---
         st.title("💰 Personal Finance Tracker")
         st.caption("Track your income 💵 and expenses 💸 easily!")
 
@@ -148,7 +151,6 @@ class FinanceApp:
             )
         else:
             st.info("🛑 No data available to export.")
-
 
 # --- Run App ---
 if __name__ == "__main__":
